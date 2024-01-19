@@ -1,4 +1,4 @@
-import Slider from "@/komponenten/slider";
+import Slider from "@/komponenten/Slider";
 import Produktliste from "@/komponenten/Produktliste";
 
 export default function Home() {
