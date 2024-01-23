@@ -1,12 +1,11 @@
-import jsondb from "@/jsondb/produkte";
 import { Card, Button } from "react-bootstrap";
 import Link from "next/link";
 
-export default function Produktliste() {
+export default function Produktliste({ produkte }) {
   return (
     <div>
       <div className="row row-cols-3">
-        {jsondb.produkte.map((produkt) => (
+        {produkte?.map((produkt) => (
           <div key={produkt.name} className="mt-3 col">
             <Card>
               <Link id="link" href={`/produkte/${produkt.url}`} passHref>
