@@ -3,8 +3,24 @@ import Image from "next/image";
 import { ListGroup, Button, ListGroupItem } from "react-bootstrap";
 import mongodb from "@/utils/mongodb";
 import Produkt from "@/models/Produkt";
+import { useState } from "react";
 
 export default function Produktseite({ produkt }) {
+  const [preis, setPreis] = useState(produkt.preis);
+  const [extras, setExtras] = useState([]);
+  const [menge, setMenge] = useState(1);
+
+  const addExtra = (e, extra) => {
+    const checked = e.target.checked;
+    if (checked) {
+      setPreis(preis + extra.preis);
+      setExtras([...extras, extra]);
+    } else {
+      setPreis(preis - extra.preis);
+      setExtras(extras.filter((alleExtras) => alleExtras._id !== extra._id));
+    }
+  };
+
   if (!produkt) {
     return (
       <div>
@@ -35,15 +51,20 @@ export default function Produktseite({ produkt }) {
           <h1>{produkt.name}</h1>
           <ListGroup variant="flush">
             <ListGroupItem>
-              <h2 className="text-danger">{produkt.preis} €</h2>
+              <h2 className="text-danger">{preis.toFixed(2)} €</h2>
             </ListGroupItem>
             <ListGroupItem>{produkt.beschreibung}</ListGroupItem>
             <ListGroupItem>
               {produkt.extras.length ? "Extras: " : <p></p>}
               {produkt.extras.map((extra) => (
-                <span key={extra.name}>
+                <span key={extra._id}>
                   {extra.text}
-                  <input className="form-check-input me-2" type="checkbox" />
+                  <input
+                    className="form-check-input me-2"
+                    type="checkbox"
+                    id={extra.text}
+                    onChange={(e) => addExtra(e, extra)}
+                  />
                 </span>
               ))}
             </ListGroupItem>
@@ -51,8 +72,10 @@ export default function Produktseite({ produkt }) {
               <input
                 className="form-control w-50"
                 type="number"
-                placeholder="1"
+                value={menge}
                 min="1"
+                max="100"
+                onChange={(e) => setMenge(e.target.value)}
               ></input>
             </ListGroupItem>
             <ListGroupItem>
