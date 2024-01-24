@@ -4,11 +4,14 @@ import { ListGroup, Button, ListGroupItem } from "react-bootstrap";
 import mongodb from "@/utils/mongodb";
 import Produkt from "@/models/Produkt";
 import { useState } from "react";
+import { UseDispatch, useDispatch } from "react-redux";
+import { addProdukte } from "@/redux/warenkorbSlice";
 
 export default function Produktseite({ produkt }) {
   const [preis, setPreis] = useState(produkt.preis);
   const [extras, setExtras] = useState([]);
   const [menge, setMenge] = useState(1);
+  const dispatch = useDispatch();
 
   const addExtra = (e, extra) => {
     const checked = e.target.checked;
@@ -19,6 +22,10 @@ export default function Produktseite({ produkt }) {
       setPreis(preis - extra.preis);
       setExtras(extras.filter((alleExtras) => alleExtras._id !== extra._id));
     }
+  };
+
+  const zumWarenkorb = () => {
+    dispatch(addProdukte({ ...produkt, extras, preis, menge }));
   };
 
   if (!produkt) {
@@ -80,7 +87,9 @@ export default function Produktseite({ produkt }) {
             </ListGroupItem>
             <ListGroupItem>
               <div className="row shadow">
-                <Button variant="danger">zum Warenkorb</Button>
+                <Button variant="danger" onClick={zumWarenkorb}>
+                  zum Warenkorb
+                </Button>
               </div>
             </ListGroupItem>
           </ListGroup>
