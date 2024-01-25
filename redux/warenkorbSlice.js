@@ -16,8 +16,17 @@ const warenkorbSlice = createSlice({
     leeren: (state) => {
       state = initialState;
     },
+    loescheProdukt: (state, action) => {
+      const leftProdukte = state.produkte.filter(
+        (produkt) => produkt._id !== action.payload._id
+      );
+      state.produkte = leftProdukte;
+
+      state.wAnzahl -= 1;
+      state.gesamtbetrag -= action.payload.preis * action.payload.menge;
+    },
   },
 });
 
-export const { addProdukte, leeren } = warenkorbSlice.actions;
+export const { loescheProdukt, addProdukte, leeren } = warenkorbSlice.actions;
 export default warenkorbSlice.reducer;

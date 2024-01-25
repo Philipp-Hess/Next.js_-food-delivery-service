@@ -19,7 +19,8 @@
     "react-dom": "^18",
     "react-redux": "^9.1.0",
     "redux": "^5.0.1",
-    "sass": "^1.69.7"
+    "sass": "^1.69.7",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "eslint": "^8",

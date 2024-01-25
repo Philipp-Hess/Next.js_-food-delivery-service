@@ -13,10 +13,12 @@ export default function Produktliste({ produkte }) {
               </Link>
               <Card.Body>
                 <Card.Title>
-                  {produkt.name} {produkt.preis}€
+                  {produkt.name} {produkt.preis.toFixed(2)}€
                 </Card.Title>
                 <Card.Text>{produkt.beschreibung}</Card.Text>
-                <Button variant="danger">zum Warenkorb</Button>
+                <Link href={`/produkte/${produkt.url}`} passHref>
+                  <Button variant="danger">Bestellen</Button>
+                </Link>
               </Card.Body>
             </Card>
           </div>
