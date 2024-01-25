@@ -123,7 +123,7 @@ export default function Warenkorb() {
                         ))}
                       </td>
                       <td>{produkt.menge}</td>
-                      <td>{(produkt.preis * produkt.menge).toFixed(2)}</td>
+                      <td>{(produkt.preis * produkt.menge).toFixed(2)} € </td>
                       <td>
                         <Button
                           className="btn-sm"
@@ -142,7 +142,9 @@ export default function Warenkorb() {
                 <Card>
                   <Card.Header as="h5">Gesamt</Card.Header>
                   <Card.Body className="text-center">
-                    <Card.Title>{warenkorb.gesamtbetrag.toFixed(2)}</Card.Title>
+                    <Card.Title>
+                      {warenkorb.gesamtbetrag.toFixed(2)} EUR
+                    </Card.Title>
                     {kasse ? (
                       <PayPalScriptProvider
                         options={{
