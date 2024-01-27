@@ -20,8 +20,10 @@ export default async function handler(req, res) {
 
   if (method === "PUT") {
     try {
-      const bestellung = await Bestellung.create(req.body);
-      res.status(201).json(bestellung);
+      const bestellung = await Bestellung.findByIdAndUpdate(nr, req.body, {
+        new: true,
+      });
+      res.status(200).json(bestellung);
     } catch (error) {
       res.status(500).json(error);
     }
