@@ -95,7 +95,7 @@ export default function Warenkorb() {
                 adresse:
                   kunde.address.address_line_1 +
                   ", " +
-                  kunde.address.admin_area_1,
+                  kunde.address.admin_area_2,
                 betrag: warenkorb.gesamtbetrag,
                 status: 0,
                 zahlung: 1,
