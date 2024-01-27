@@ -2,7 +2,7 @@ import { Table, CloseButton, Button, Card } from "react-bootstrap";
 import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
 import Link from "next/link";
-import { loescheProdukt } from "../redux/warenkorbSlice";
+import { loescheProdukt, leeren } from "../redux/warenkorbSlice";
 import { useEffect } from "react";
 import { useState } from "react";
 import {
@@ -10,6 +10,8 @@ import {
   PayPalButtons,
   usePayPalScriptReducer,
 } from "@paypal/react-paypal-js";
+import axios from "axios";
+import { useRouter } from "next/router";
 
 export default function Warenkorb() {
   const dispatch = useDispatch();
@@ -17,6 +19,7 @@ export default function Warenkorb() {
   const clientID =
     "AQOZdY3nyMh_wZSvDNwnvnSY2-fe5DybaTl2-rPZlDxssMUgozs5rB9vo8BGMEQBcCacX996EJ41bC7G";
   const [kasse, setKasse] = useState(false);
+  const router = useRouter();
 
   const entfernen = (produkt) => {
     dispatch(loescheProdukt(produkt));
@@ -24,7 +27,25 @@ export default function Warenkorb() {
 
   const amount = warenkorb.gesamtbetrag;
   const currency = "EUR";
-  const style = { layout: "vertical" };
+  const style = {
+    layout: "vertical",
+    height: 30,
+  };
+
+  const erstelleBestellung = async (data) => {
+    try {
+      const res = await axios.post(
+        "http://localhost:3000/api/bestellungen",
+        data
+      );
+      if (res.status === 201) {
+        dispatch(leeren());
+        router.push(`/bestellungen/${res.data._id}`);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const ButtonWrapper = ({ currency, showSpinner }) => {
     // usePayPalScriptReducer can be use only inside children of PayPalScriptProviders
@@ -68,7 +89,17 @@ export default function Warenkorb() {
           }}
           onApprove={function (data, actions) {
             return actions.order.capture().then(function (details) {
-              console.log(details.purchase_units[0].shipping);
+              const kunde = details.purchase_units[0].shipping;
+              erstelleBestellung({
+                kunde: kunde.name.full_name,
+                adresse:
+                  kunde.address.address_line_1 +
+                  ", " +
+                  kunde.address.admin_area_1,
+                betrag: warenkorb.gesamtbetrag,
+                status: 0,
+                zahlung: 1,
+              });
             });
           }}
         />
@@ -123,7 +154,7 @@ export default function Warenkorb() {
                         ))}
                       </td>
                       <td>{produkt.menge}</td>
-                      <td>{(produkt.preis * produkt.menge).toFixed(2)} € </td>
+                      <td>{(produkt.preis * produkt.menge).toFixed(2)}€</td>
                       <td>
                         <Button
                           className="btn-sm"
