@@ -16,7 +16,7 @@ export default function Bestellung({ bestellungen }) {
         router.reload();
       }
     } catch (error) {
-      console.error("Error updating status:", error.message);
+      console.log(error);
     }
   };
 
@@ -25,11 +25,9 @@ export default function Bestellung({ bestellungen }) {
       await axios.delete(`http://localhost:3000/api/bestellungen/` + id);
       router.reload();
     } catch (error) {
-      console.error("Error deleting order:", error.message);
+      console.log(error);
     }
   };
-
-  console.log("Received orders:", bestellungen); // Log orders to console for debugging
 
   return (
     <div>
@@ -48,9 +46,9 @@ export default function Bestellung({ bestellungen }) {
                 </th>
               </tr>
             </thead>
-            <tbody>
-              {bestellungen.map((bestellung) => (
-                <tr key={bestellung._id}>
+            {bestellungen.map((bestellung) => (
+              <tbody key={bestellung._id}>
+                <tr>
                   <td>
                     <Link href={`/bestellungen/${bestellung._id}`}>
                       <a className="text-danger">{bestellung._id}</a>
@@ -76,8 +74,8 @@ export default function Bestellung({ bestellungen }) {
                     </Button>
                   </td>
                 </tr>
-              ))}
-            </tbody>
+              </tbody>
+            ))}
           </Table>
         </div>
       </div>
@@ -85,21 +83,18 @@ export default function Bestellung({ bestellungen }) {
   );
 }
 
-export async function getServerSideProps() {
-  try {
-    const res = await axios.get(`http://localhost:3000/api/bestellungen`);
-    console.log("API Response:", res.data);
+export async function getServerSideProps(ctx) {
+  const meinCookie = ctx.req?.cookies || "";
+  if (meinCookie.token !== process.env.TOKEN) {
     return {
-      props: { bestellungen: res.data },
-    };
-  } catch (error) {
-    console.error("Error fetching data:", error.message);
-    console.error(
-      "Error response:",
-      error.response ? error.response.data : "No response"
-    );
-    return {
-      props: { bestellungen: [] },
+      redirect: {
+        destination: "/backend/login",
+        permant: false,
+      },
     };
   }
+  const res = await axios.get(`http://localhost:3000/api/bestellungen`);
+  return {
+    props: { bestellungen: res.data },
+  };
 }

@@ -29,3 +29,11 @@ export default async function handler(req, res) {
     }
   }
 }
+if (method === "DELETE") {
+  try {
+    const bestellung = await Bestellung.findByIdAndDelete(nr);
+    res.status(200).json(bestellung);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+}

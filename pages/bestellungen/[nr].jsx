@@ -7,20 +7,16 @@ export default function Bestellung({ bestellung }) {
   const { nr } = router.query;
 
   let status;
-
   switch (bestellung.status) {
     case 0:
       status = "Eingegangen";
       break;
-
     case 1:
       status = "Zubereitung";
       break;
-
     case 2:
       status = "Unterwegs";
       break;
-
     case 3:
       status = "Ausgeliefert";
       break;
@@ -60,10 +56,32 @@ export default function Bestellung({ bestellung }) {
                     {bestellung.status < 3 ? (
                       <Spinner animation="border" variant="success" size="sm" />
                     ) : (
-                      <span>✅</span>
+                      <span>✔️</span>
                     )}
                   </td>
                 </tr>
+              </tbody>
+            </Table>
+            <Table hover responsive>
+              <thead>
+                <tr>
+                  <th>Produktname</th>
+                  <th>Extras</th>
+                  <th>Menge</th>
+                </tr>
+              </thead>
+              <tbody>
+                {bestellung.produkte.map((produkt) => (
+                  <tr key={produkt._id}>
+                    <td>{produkt.name}</td>
+                    <td>
+                      {produkt.extras.map((extra) => (
+                        <span key={extra._id}>{extra} </span>
+                      ))}
+                    </td>
+                    <td>{produkt.menge}</td>
+                  </tr>
+                ))}
               </tbody>
             </Table>
           </div>
@@ -72,7 +90,7 @@ export default function Bestellung({ bestellung }) {
               <Card>
                 <Card.Header as="h5">Gesamt</Card.Header>
                 <Card.Body className="text-center">
-                  <Card.Title>{bestellung.betrag.toFixed(2)}</Card.Title>
+                  <Card.Title>{bestellung.betrag.toFixed(2)} EUR</Card.Title>
                   {bestellung.zahlung === 0 ? (
                     <Button variant="danger disabled">offen</Button>
                   ) : (
