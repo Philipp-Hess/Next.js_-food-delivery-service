@@ -48,8 +48,6 @@ export default function Warenkorb() {
   };
 
   const ButtonWrapper = ({ currency, showSpinner }) => {
-    // usePayPalScriptReducer can be use only inside children of PayPalScriptProviders
-    // This is the main reason to wrap the PayPalButtons in a new component
     const [{ options, isPending }, dispatch] = usePayPalScriptReducer();
 
     useEffect(() => {
@@ -64,7 +62,7 @@ export default function Warenkorb() {
 
     return (
       <>
-        {showSpinner && isPending && <div className="spinner" />}
+        {showSpinner && isPending && <div className="spinner">Loading...</div>}
         <PayPalButtons
           style={style}
           disabled={false}
@@ -83,7 +81,6 @@ export default function Warenkorb() {
                 ],
               })
               .then((orderId) => {
-                // Your code here after create the order
                 return orderId;
               });
           }}
@@ -102,6 +99,7 @@ export default function Warenkorb() {
               });
             });
           }}
+          onCancel={() => setKasse(false)} // Handle cancellation
         />
       </>
     );
@@ -182,12 +180,11 @@ export default function Warenkorb() {
                           "client-id": clientID,
                           components: "buttons",
                           currency: "EUR",
-                          //"disable-funding":"sofort"
                         }}
                       >
                         <ButtonWrapper
                           currency={currency}
-                          showSpinner={false}
+                          showSpinner={!kasse}
                         />
                       </PayPalScriptProvider>
                     ) : (

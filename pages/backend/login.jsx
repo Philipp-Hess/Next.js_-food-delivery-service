@@ -3,13 +3,13 @@ import { useRouter } from "next/router";
 import { Form, Button } from "react-bootstrap";
 import axios from "axios";
 
-export default function login() {
+export default function Login() {
   const [benutzer, setBenutzer] = useState(null);
   const [passwort, setPasswort] = useState(null);
   const [error, setError] = useState(false);
   const router = useRouter();
 
-  const login = async () => {
+  const handleLogin = async () => {
     try {
       await axios.post("http://localhost:3000/api/login", {
         benutzer,
@@ -41,7 +41,7 @@ export default function login() {
               onChange={(e) => setPasswort(e.target.value)}
             />
           </Form.Group>
-          <Button variant="primary" onClick={login}>
+          <Button variant="primary" onClick={handleLogin}>
             Login
           </Button>
         </Form>
