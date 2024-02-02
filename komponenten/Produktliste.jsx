@@ -4,7 +4,7 @@ import Link from "next/link";
 export default function Produktliste({ produkte }) {
   return (
     <div>
-      <div className="row row-cols-3">
+      <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3">
         {produkte?.map((produkt) => (
           <div key={produkt.name} className="mt-3 col">
             <Card>
@@ -24,8 +24,8 @@ export default function Produktliste({ produkte }) {
           </div>
         ))}
       </div>
-      <br></br>
-      <br></br>
+      <br />
+      <br />
     </div>
   );
 }

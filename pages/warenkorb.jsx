@@ -106,14 +106,14 @@ export default function Warenkorb() {
   };
 
   return (
-    <div>
+    <div className="container mt-4">
       {warenkorb.wAnzahl === 0 ? (
         <h2>Der Warenkorb ist leer!</h2>
       ) : (
         <div>
           <h1>Warenkorb</h1>
           <div className="row mt-4">
-            <div className="col-9">
+            <div className="col-lg-9 mb-3">
               <Table hover responsive>
                 <thead>
                   <tr>
@@ -166,7 +166,7 @@ export default function Warenkorb() {
                 </tbody>
               </Table>
             </div>
-            <div className="col-3 p-2">
+            <div className="col-lg-3">
               <div className="shadow">
                 <Card>
                   <Card.Header as="h5">Gesamt</Card.Header>
