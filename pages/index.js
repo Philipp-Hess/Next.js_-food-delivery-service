@@ -1,4 +1,3 @@
-import Slider from "@/komponenten/Slider";
 import Produktliste from "@/komponenten/Produktliste";
 import mongodb from "@/utils/mongodb";
 import Produkt from "@/models/Produkt";
@@ -6,7 +5,6 @@ import Produkt from "@/models/Produkt";
 export default function Home({ produkte }) {
   return (
     <div>
-      <Slider />
       <Produktliste produkte={produkte} />
     </div>
   );
